@@ -1,47 +1,12 @@
 {
   "name": "karma-cbt-launcher",
-  "version": "0.3.1",
-  "description": "Karma Browser Launcher for browsers on CrossBrowserTesting",
-  "main": "lib/index.js",
-  "module": "src/index.js",
-  "repository": "actano/karma-cbt-launcher",
-  "author": "Marcus Mennemeier <marcus.mennemeier@actano.de>",
+  "version": "1.0.0",
+  "description": "Custom launcher for Karma that allows testing remotely through CrossBrowserTesting.",
+  "main": "index.js",
+  "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
   "license": "MIT",
-  "keywords": [
-    "karma-launcher"
-  ],
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "es6-promisify": "^5.0.0",
-    "eslint": "^4.4.0",
-    "eslint-config-actano-base": "^2.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "karma": "^1.7.0",
-    "karma-mocha": "^1.3.0",
-    "mocha": "^3.5.0",
-    "rollup": "^0.50.0",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.1.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "selenium-webdriver": "^3.5.0"
-  },
-  "engines": {
-    "node": ">=6.11.0",
-    "yarn": "*"
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "build": "rollup -c",
-    "prepublishOnly": "yarn run build",
-    "test": "yarn run build && karma start --singleRun --browsers win7_ie11,win10_edge15"
-  },
-  "dependencies": {
-    "cbt_tunnels": "^0.1.0"
-  },
-  "peerDependencies": {
-    "selenium-webdriver": "^2.0.0 || ^3.0.0"
+    "cbt_tunnels": "^0.9.3",
+    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
