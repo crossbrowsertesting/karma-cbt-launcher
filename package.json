@@ -4,9 +4,12 @@
   "description": "Custom launcher for Karma that allows testing remotely through CrossBrowserTesting.",
   "main": "index.js",
   "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
+  "keywords": [
+    "karma-launcher"
+  ],
   "license": "MIT",
   "devDependencies": {
     "cbt_tunnels": "^0.9.3",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "selenium-webdriver": "^3.5.0"
   }
 }
