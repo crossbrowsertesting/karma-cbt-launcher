@@ -58,7 +58,7 @@ function CbtReporter(logger) {
         setScore(score, seleniumId);
         let description = res.success + ' test(s) passed, ' + res.failed + ' test(s) failed';
         setDescription(description, seleniumId);
-    }
+    };
 }
 
 module.exports = CbtReporter;

@@ -26,7 +26,7 @@ let karmaLogger = false;
 // This is done by passing the option on the url, in response the Karma server will
 // set the following meta in the page.
 //   <meta http-equiv="X-UA-Compatible" content="[VALUE]"/>
-const XUA = 'x-ua-compatible'
+const XUA = 'x-ua-compatible';
 
 function handleXUaCompatible(args, urlObj) {
     if (args[XUA]) {
@@ -75,24 +75,24 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
     browser.name = `${spec.browser_api_name} on ${spec.os_api_name} (${spec.screen_resolution}) via CrossBrowserTesting`;
     
     const start = async (id, url) => {
-        let cbtSession = null
-        let driver = null
-        let interval = false
+        let cbtSession = null;
+        let driver = null;
+        let interval = false;
         
         const stop = async () => {
-            const promises = []
+            const promises = [];
             if (cbtSession) {
-                promises.push(cbtSession.stop())
+                promises.push(cbtSession.stop());
             }
             if (interval) {
-                clearInterval(interval)
+                clearInterval(interval);
             }
             if (driver && driver.getSession()) {
-                log.debug('Quitting selenium')
-                promises.push(driver.quit())
+                log.debug('Quitting selenium');
+                promises.push(driver.quit());
             }
-            await Promise.all(promises)
-        }
+            await Promise.all(promises);
+        };
         
         try {
             cbtSession = await session.create(id);
@@ -114,13 +114,13 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
             await stop();
             return async () => {};
         }
-    }
+    };
     
     browser._start = (myurl) => {
         log.info('Connecting to %s', browser.name);
         const _url = url.format(handleTunnelHost(handleXUaCompatible(spec, url.parse(myurl, true))));
         kill = start(browser.id, _url);
-    }
+    };
     
     browser.on('kill', async (done) => {
         if (!kill) {
@@ -136,10 +136,10 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
         } catch (e) {
             done(e);
         }
-    })
+    });
     
-    return browser
-}
+    return browser;
+};
 
 factory.$inject = ['logger', 'baseBrowserDecorator', 'args', 'config'];
 

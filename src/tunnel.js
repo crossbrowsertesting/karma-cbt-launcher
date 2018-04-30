@@ -16,7 +16,7 @@ module.exports = {
     setLogger: (logger) => log = logger.create('cbt-tunnel'),
     stop: () => {
         if(!isRunning)
-            cbt.stop()
+            cbt.stop();
         isRunning = false;
     },
     start:() => new Promise(async(resolve, reject) => { 

@@ -1,6 +1,7 @@
 module.exports = {
     "parser": "babel-eslint",
     "rules": {
-        "strict": 1
+        "strict": 2,
+        "semi": 2
     }
 };

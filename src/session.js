@@ -51,6 +51,6 @@ module.exports = {
                 caps.set('tunnel_name', cbtTunnel.name);
                 return builder;
             },
-        }
+        };
     }
 };
