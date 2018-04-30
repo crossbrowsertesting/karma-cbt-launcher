@@ -26,6 +26,7 @@ module.exports = {
         try {
             await cbtTunnel.start();
         } catch(err) {
+
             console.error(err);
             process.exit(1);
         }
