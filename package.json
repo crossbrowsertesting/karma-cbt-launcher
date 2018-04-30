@@ -1,12 +1,15 @@
 {
   "name": "karma-cbt-launcher",
-  "version": "0.5.0",
+  "version": "0.4.0",
   "description": "Custom launcher for Karma that allows testing remotely through CrossBrowserTesting.",
   "main": "index.js",
   "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
   "repository": "crossbrowsertesting/karma-cbt-launcher",
   "keywords": [
-    "karma-launcher"
+    "karma-launcher",
+    "karma-plugin",
+    "cbt",
+    "crossbrowsertesting"
   ],
   "scripts": {
     "publish": "gulp"
@@ -18,7 +21,7 @@
     "selenium-webdriver": "^3.5.0"
   },
   "engines": {
-    "node": "^8.11.1"
+    "node": ">= 6.11.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
