@@ -1,3 +1,5 @@
+require('babel-polyfill');
+
 module.exports = (config) => {
   config.set({
     singleRun: true,
