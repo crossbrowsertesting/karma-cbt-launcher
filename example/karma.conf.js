@@ -6,7 +6,7 @@ module.exports = (config) => {
     frameworks: ['jasmine'],
     plugins: [
       'karma-*',
-      '@cbt/karma-cbt-launcher'
+      'karma-cbt-launcher'
     ],
     preprocessors: {
       'tests/*.html': ['html2js']
