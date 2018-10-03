@@ -1,6 +1,6 @@
 {
   "name": "karma-cbt-launcher",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Custom launcher for Karma that allows testing remotely through CrossBrowserTesting.",
   "main": "index.js",
   "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
