@@ -1,5 +1,5 @@
-/* 
-This code was originally taken and modified from Actano/Marcus Mennemeier's karma-cbt-launcher. 
+/*
+This code was originally taken and modified from Actano/Marcus Mennemeier's karma-cbt-launcher.
 The original code can be found at http://github.com/actano/karma-cbt-launcher
 */
 
@@ -46,7 +46,7 @@ function handleTunnelHost(urlObj) {
 }
 
 const factory = (logger, baseBrowserDecorator, args, config) => {
-    
+
     if (!karmaLogger) {
         karmaLogger = true;
         log = logger.create('karma-cbt');
@@ -61,24 +61,55 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
 
     // allows for webdriver to run tests concurrently for versions < 4
     process.env.SELENIUM_PROMISE_MANAGER = 0;
-    
+
     const spec = { name: 'Karma test', build: '', ...args };
+
+    spec.name = spec.name || 'Karma test';
+    spec.build = spec.build || '';
+
     const pseudoActivityInterval = spec.pseudoActivityInterval;
     delete spec.base;
     delete spec.config;
     delete spec.pseudoActivityInterval;
-    
+
     let kill = null;
-    
+
     const browser = {};
     baseBrowserDecorator(browser);
-    browser.name = `${spec.browser_api_name} on ${spec.os_api_name} (${spec.screen_resolution}) via CrossBrowserTesting`;
-    
+
+    // The next three blocks of if statements build the string depending on what caps the user is defining.
+
+    // get browser from browser_api_name or browserName and version from caps
+    if (spec.browser_api_name) {
+        browser.name = `${spec.browser_api_name} `;
+    } else if (spec.browserName) {
+        browser.name = `${spec.browserName} `;
+        if (spec.version) {
+            browser.name += `${spec.version} `;
+        }
+    }
+
+    // get OS from os_api_name or platform caps
+    if (spec.os_api_name) {
+        browser.name += `on ${spec.os_api_name} `;
+    } else if (spec.platform) {
+        browser.name += `on ${spec.platform} `;
+    }
+
+    // get resolution from caps if it was defined
+    if (spec.screen_resolution) {
+        browser.name += `(${spec.screen_resolution}) `;
+    } else if (spec.screenResolution) {
+        browser.name += `(${spec.screenResolution}) `;
+    }
+
+    browser.name += 'via CrossBrowserTesting';
+
     const start = async (id, url) => {
         let cbtSession = null;
         let driver = null;
         let interval = false;
-        
+
         const stop = async () => {
             const promises = [];
             if (cbtSession) {
@@ -93,21 +124,21 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
             }
             await Promise.all(promises);
         };
-        
+
         try {
             cbtSession = await session.create(id);
             driver = cbtSession.configureBuilder(new webdriver.Builder().withCapabilities(spec)).build();
             driver.getSession().then( (seleniumSession) => {
                 cbtSession.setSeleniumId(seleniumSession.getId());
             });
-            
+
             interval = pseudoActivityInterval && setInterval(() => {
                 log.debug('Imitate activity');
                 driver.getTitle();
             }, pseudoActivityInterval);
-            
+
             driver.get(url);
-            
+
             return stop;
         } catch (e) {
             log.error('Error starting %s', browser.name, e);
@@ -115,13 +146,13 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
             return async () => {};
         }
     };
-    
+
     browser._start = (myurl) => {
         log.info('Connecting to %s', browser.name);
         const _url = url.format(handleTunnelHost(handleXUaCompatible(spec, url.parse(myurl, true))));
         kill = start(browser.id, _url);
     };
-    
+
     browser.on('kill', async (done) => {
         if (!kill) {
             done();
@@ -137,7 +168,7 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
             done(e);
         }
     });
-    
+
     return browser;
 };
 
