@@ -1,37 +1,66 @@
-# Karma-Launcher for CrossBrowserTesting
+## karma-cbt-launcher 
+Run your [Karma](https://karma-runner.github.io/2.0/index.html) tests on [CrossBrowserTesting's](http://crossbrowsertesting.com) platform.
 
-## Configuration
+*A large portion of this code was originally taken and modified from Actano/Marcus Mennemeier's karma-cbt-launcher. The original code can be found [here](http://github.com/actano/karma-cbt-launcher).*
 
-### Credentials
+#### Install:  
+```
+npm install @cbt/karma-cbt-launcher --save-dev
+```
 
-You have to set Environment Variables:
+#### Usage:
+Setup your tests in Karma as you normally would and modify your config file with the customLaunchers and cbtConfig values. See the example directory for a sample test and karma config file.
 
-    CBT_USERNAME=<Your username>
-    CBT_AUTHKEY=<Your authkey>
+**karma.conf.js**
+```javascript
+module.exports = (config) => {
+  config.set({
+    singleRun: true,
+    frameworks: ['jasmine'],
+    plugins: [
+      'karma-*',
+      '@cbt/karma-cbt-launcher'
+    ],
+    preprocessors: {
+      'tests/*.html': ['html2js']
+    },
+    files: [
+      'tests/*.js',
+      'tests/index.html'
+    ],
+    logLevel: config.LOG_DEBUG,
+    browsers: [
+      'win7_ie11',
+      'win10_edge20',
+    ],
+    reporters: [
+      'progress',
+      'CrossBrowserTesting',
+    ],
+    cbtConfig: {
+      username: 'CBT_USERNAME',
+      authkey: 'CBT_AUTHKEY',
+    },
+    customLaunchers: {
+      win7_ie11: {
+        base: 'CrossBrowserTesting',
+        browserName: 'win7_ie11',
+        browser_api_name: 'IE11',
+        os_api_name: 'Win7x64',
+        screen_resolution: '1366x768',
+      },
+      win10_edge20: {
+        base: 'CrossBrowserTesting',
+        browserName: 'win10_edge20',
+        browser_api_name: 'Edge20',
+        os_api_name: 'Win10',
+        screen_resolution: '1920x1080',
+      },
+    },
+  })
+}
+```
+You can also specify the username and authkey using environment variables: **CBT_USERNAME** and **CBT_AUTHKEY**
 
-Jenkins Plugin for CrossBrowserTesting does this automatically
-
-### Browser Selection
-
-Use `base: CrossBrowserTesting`, then any configuration you like, e.g.:
-
-    browserName: 'internet explorer'
-    browser_api_name: 'IE11'
-    os_api_name: 'Win7x64-Base'
-    screen_resolution: '1366x768'
-    record_video: 'true'
-    record_network: 'true'
-
-To give your tests beautiful names in CBT UI:
-
-    name: <Wonderful DisplayName>
-    build: <version>
-
-## What it does
-
-* Creates a unnamed tunnel to CBT
-* Starts browser on CBT and connects them to karma through tunnel
-
-## cbt_tunnels version
-
-* cbt_tunnels 0.2.0 casts command-line agument to `--ready` to boolean, then throwing an exception that it expects a string as pathname
+#### Reporter:
+A custom reporter 'CrossBrowserTesting' is also included that will mark a test as pass if all tests return success. If a single test returns failed, the entire suite for that device will be marked failed on the CBT results page. The results message will also be set with the number of tests passed and the number that failed.

@@ -1,47 +1,43 @@
 {
   "name": "karma-cbt-launcher",
-  "version": "0.3.1",
-  "description": "Karma Browser Launcher for browsers on CrossBrowserTesting",
-  "main": "lib/index.js",
-  "module": "src/index.js",
-  "repository": "actano/karma-cbt-launcher",
-  "author": "Marcus Mennemeier <marcus.mennemeier@actano.de>",
-  "license": "MIT",
+  "version": "0.4.3",
+  "description": "Custom launcher for Karma that allows testing remotely through CrossBrowserTesting.",
+  "main": "index.js",
+  "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
+  "repository": "crossbrowsertesting/karma-cbt-launcher",
   "keywords": [
-    "karma-launcher"
+    "karma-launcher",
+    "karma-plugin",
+    "cbt",
+    "crossbrowsertesting"
   ],
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "es6-promisify": "^5.0.0",
-    "eslint": "^4.4.0",
-    "eslint-config-actano-base": "^2.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "karma": "^1.7.0",
-    "karma-mocha": "^1.3.0",
-    "mocha": "^3.5.0",
-    "rollup": "^0.50.0",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.1.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
+  "scripts": {
+    "prepare": "gulp"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cbt_tunnels": "^0.9.3",
+    "request": "^2.85.0",
     "selenium-webdriver": "^3.5.0"
   },
   "engines": {
-    "node": ">=6.11.0",
-    "yarn": "*"
+    "node": ">= 6.11.0"
   },
-  "scripts": {
-    "lint": "eslint .",
-    "build": "rollup -c",
-    "prepublishOnly": "yarn run build",
-    "test": "yarn run build && karma start --singleRun --browsers win7_ie11,win10_edge15"
-  },
-  "dependencies": {
-    "cbt_tunnels": "^0.1.0"
-  },
-  "peerDependencies": {
-    "selenium-webdriver": "^2.0.0 || ^3.0.0"
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-eslint": "^4.0.2"
   }
 }

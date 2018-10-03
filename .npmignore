@@ -1,4 +1,6 @@
-/*
-!/lib
-!readme.md
-!package.json
+node_modules/
+package-lock.json
+.DS_Store/
+example/node_modules/
+example/package-lock.json
+!lib/

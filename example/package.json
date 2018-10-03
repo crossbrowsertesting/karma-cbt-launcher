@@ -1,0 +1,18 @@
+{
+  "name": "karma-cbt-launcher-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Tim Hamilton <Timothy.Hamilton@smartbear.com> (http://crossbrowsertesting.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "@cbt/karma-cbt-launcher": "^0.4.0",
+    "jasmine": "^3.1.0",
+    "karma": "^2.0.2",
+    "karma-html2js-preprocessor": "^1.1.0",
+    "karma-jasmine": "^1.1.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
+}

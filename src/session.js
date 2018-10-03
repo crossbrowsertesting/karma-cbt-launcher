@@ -1,43 +1,56 @@
-import { username, authkey, tunnelname, startTunnel, stopTunnel, setLogger as setTunnelLogger } from './tunnel'
-import consoleLogger from './console-logger'
+/* 
+This code was originally taken and modified from Actano/Marcus Mennemeier's karma-cbt-launcher. 
+The original code can be found at http://github.com/actano/karma-cbt-launcher
+*/
 
-const activeSessions = []
 
-const remoteHub = 'http://hub.crossbrowsertesting.com:80/wd/hub'
+const consoleLogger = require('./console-logger');
+const cbtTunnel = require('./tunnel');
 
-let log = consoleLogger('cbt-session')
+const activeSessions = {};
 
-export const setLogger = (logger) => {
-  log = logger.create('cbt-session')
-  setTunnelLogger(logger)
-}
+const remoteHub = 'http://hub.crossbrowsertesting.com:80/wd/hub';
 
-export default async (id) => {
-  log.debug('Starting session %s', id)
-  if (activeSessions.includes(id)) throw new Error(`Session ${id} already active`)
-  activeSessions.push(id)
-  if (activeSessions.length === 1) {
-    log.info('First session, starting tunnel')
-  }
-  await startTunnel()
-  return {
-    async stop() {
-      const index = activeSessions.indexOf(id)
-      if (index < 0) throw new Error(`Session ${id} not active`)
-      log.debug('Closing session %s', id)
-      activeSessions.splice(index, 1)
-      if (activeSessions.length === 0) {
-        log.info('Last session, stopping tunnel')
-        await stopTunnel()
-      }
+let log = consoleLogger('cbt-session');
+
+module.exports = {
+    activeSessions: activeSessions,
+    setLogger: (logger) => {
+        log = logger.create('cbt-session');
+        cbtTunnel.setLogger(logger);
     },
-    configureBuilder(builder) {
-      log.debug('Configuring selenium builder for %s', JSON.stringify(builder.getCapabilities()))
-      const caps = builder.usingServer(remoteHub).getCapabilities()
-      caps.set('username', username)
-      caps.set('password', authkey)
-      caps.set('tunnel_name', tunnelname)
-      return builder
-    },
-  }
-}
+    create: async (id) => {
+        log.debug('Starting session %s', id);
+        if (activeSessions[id]) throw new Error(`Session ${id} already active`);
+        activeSessions[id] = '';
+        try {
+            await cbtTunnel.start();
+        } catch(err) {
+
+            console.error(err);
+            process.exit(1);
+        }
+        return {
+            stop() {
+                if (!activeSessions[id]) throw new Error(`Session ${id} not active`);
+                log.debug('Closing session %s', id);
+                delete activeSessions[id];
+                if (Object.keys(activeSessions).length === 0) {
+                    log.info('Last session, stopping tunnel');
+                    cbtTunnel.stop();
+                }
+            },
+            setSeleniumId: (seleniumId) => {
+                activeSessions[id] = seleniumId;
+            },
+            configureBuilder(builder) {
+                const caps = builder.usingServer(remoteHub).getCapabilities();
+                log.debug('Configuring selenium builder for %s', JSON.stringify(caps));
+                caps.set('username', cbtTunnel.username);
+                caps.set('password', cbtTunnel.authkey);
+                caps.set('tunnel_name', cbtTunnel.name);
+                return builder;
+            },
+        };
+    }
+};
