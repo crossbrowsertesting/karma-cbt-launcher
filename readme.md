@@ -5,7 +5,7 @@ Run your [Karma](https://karma-runner.github.io/2.0/index.html) tests on [CrossB
 
 #### Install:  
 ```
-npm install @cbt/karma-cbt-launcher --save-dev
+npm install karma-cbt-launcher --save-dev
 ```
 
 #### Usage:
@@ -19,7 +19,7 @@ module.exports = (config) => {
     frameworks: ['jasmine'],
     plugins: [
       'karma-*',
-      '@cbt/karma-cbt-launcher'
+      'karma-cbt-launcher'
     ],
     preprocessors: {
       'tests/*.html': ['html2js']
