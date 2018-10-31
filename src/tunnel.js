@@ -15,15 +15,26 @@ let isRunning = false;
 module.exports = {
     setLogger: (logger) => log = logger.create('cbt-tunnel'),
     stop: () => {
-        if(!isRunning)
-            cbt.stop();
-        isRunning = false;
+        return new Promise( (resolve, reject) => {
+            if(isRunning)
+                resolve();
+            cbt.stop((err, didQuit) => {
+                if(err || !didQuit) {
+                    log.error('Could not stop tunnel');
+                    reject(err);
+                }
+                log.info('Tunnel has been stopped');
+                isRunning = false;
+                resolve();
+            });
+        });
     },
     start:() => new Promise(async(resolve, reject) => { 
         let cbtConfig = {
             username: module.exports.username,
             authkey: module.exports.authkey,
-            quiet: false
+            quiet: false,
+            nokill: true
         };
 
         if(isRunning) {

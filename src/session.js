@@ -8,6 +8,7 @@ const consoleLogger = require('./console-logger');
 const cbtTunnel = require('./tunnel');
 
 const activeSessions = {};
+const waitingSessions = {};
 
 const remoteHub = 'http://hub.crossbrowsertesting.com:80/wd/hub';
 
@@ -19,9 +20,14 @@ module.exports = {
         log = logger.create('cbt-session');
         cbtTunnel.setLogger(logger);
     },
+    register: (id) => {
+        if(!waitingSessions[id])
+            waitingSessions[id] = '';
+    },
     create: async (id) => {
         log.debug('Starting session %s', id);
         if (activeSessions[id]) throw new Error(`Session ${id} already active`);
+        delete waitingSessions[id];
         activeSessions[id] = '';
         try {
             await cbtTunnel.start();
@@ -31,13 +37,13 @@ module.exports = {
             process.exit(1);
         }
         return {
-            stop() {
+            async stop() {
                 if (!activeSessions[id]) throw new Error(`Session ${id} not active`);
                 log.debug('Closing session %s', id);
                 delete activeSessions[id];
-                if (Object.keys(activeSessions).length === 0) {
+               if (Object.keys(activeSessions).length === 0 && Object.keys(waitingSessions).length === 0) {
                     log.info('Last session, stopping tunnel');
-                    cbtTunnel.stop();
+                    await cbtTunnel.stop();
                 }
             },
             setSeleniumId: (seleniumId) => {

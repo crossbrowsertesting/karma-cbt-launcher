@@ -105,6 +105,8 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
 
     browser.name += 'via CrossBrowserTesting';
 
+    session.register(browser.id);
+
     const start = async (id, url) => {
         let cbtSession = null;
         let driver = null;
@@ -162,6 +164,7 @@ const factory = (logger, baseBrowserDecorator, args, config) => {
             log.debug('Killing %s', browser.name);
             const stop = await kill;
             await stop();
+            browser._done();
             done();
             log.info('Killed %s.', browser.name);
         } catch (e) {
